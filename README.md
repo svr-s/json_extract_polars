@@ -21,7 +21,20 @@ A powerful Python utility designed to natively flatten, parse, and filter deeply
 
 ## Installation & Usage
 
-Import `extract_json` directly into your data pipeline script:
+Import `extract_json` or `extract_file` directly into your data pipeline script:
+
+### Method 1: Using `extract_file` (Recommended)
+Automatically loads and parses `.json`, `.json5`, `.yaml`, or `.yml` files directly from disk:
+
+```python
+from json_extract_polars import extract_file
+
+meta, df = extract_file('data.yaml')
+print(df.head())
+```
+
+### Method 2: Using `extract_json`
+Pass a pre-parsed dictionary or list:
 
 ```python
 import json
@@ -39,6 +52,9 @@ print(df.head())
 ---
 
 ## Function Reference
+
+### `extract_file(filepath, **kwargs)`
+A convenience wrapper that detects the file extension (`.json`, `.json5`, `.yaml`, `.yml`), safely parses the file from disk, and pipes the python dictionary directly into `extract_json`.
 
 ### `extract_json(json_data, **kwargs)`
 
