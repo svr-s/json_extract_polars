@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+src/json_extract_polars/__init__.py
+src/json_extract_polars/json_extract.py
+src/json_extract_polars.egg-info/PKG-INFO
+src/json_extract_polars.egg-info/SOURCES.txt
+src/json_extract_polars.egg-info/dependency_links.txt
+src/json_extract_polars.egg-info/requires.txt
+src/json_extract_polars.egg-info/top_level.txt

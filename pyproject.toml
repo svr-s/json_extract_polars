@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "json-extract-polars"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
   { name="Vatsa", email="228140210+svr-s@users.noreply.github.com" },
 ]
@@ -12,7 +12,9 @@ description = "A powerful Python utility designed to natively flatten, parse, an
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "polars>=0.20.0"
+    "polars>=0.20.0",
+    "pyyaml>=6.0",
+    "json5>=0.9.0"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",

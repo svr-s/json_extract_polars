@@ -3,6 +3,9 @@ import itertools
 import fnmatch
 import re
 import json
+import json5
+import yaml
+import os
 from typing import Union, Optional, Tuple, Dict, Any
 
 def _flatten_and_expand(data, parent_key='', explode_paths=None):
@@ -332,6 +335,49 @@ def extract_json(
     }
     
     return meta_data, df
+
+def extract_file(
+    filepath: str, 
+    desired_columns: Optional[list] = None, 
+    explode_paths: Optional[list] = None,
+    row_filters: Optional[Dict[str, Any]] = None, 
+    remove_duplicates: bool = False, 
+    simplify_columns: bool = False, 
+    remove_empty: Union[bool, str] = False,
+    sort_columns: bool = False,
+    keep_all_columns: bool = False
+) -> Tuple[Dict[str, Any], pl.DataFrame]:
+    """
+    Reads a file (JSON, JSON5, or YAML) from disk, parses it, and pipes it directly into `extract_json`.
+    
+    Args:
+        filepath (str): The path to the `.json`, `.json5`, `.yaml`, or `.yml` file.
+        [...other args map directly to extract_json]
+    """
+    if not os.path.exists(filepath):
+        raise FileNotFoundError(f"The file {filepath} does not exist.")
+        
+    ext = os.path.splitext(filepath)[1].lower()
+    
+    with open(filepath, 'r', encoding='utf-8') as f:
+        if ext in ['.yaml', '.yml']:
+            data = yaml.safe_load(f)
+        elif ext == '.json5':
+            data = json5.load(f)
+        else:
+            data = json.load(f)
+            
+    return extract_json(
+        json_data=data,
+        desired_columns=desired_columns,
+        explode_paths=explode_paths,
+        row_filters=row_filters,
+        remove_duplicates=remove_duplicates,
+        simplify_columns=simplify_columns,
+        remove_empty=remove_empty,
+        sort_columns=sort_columns,
+        keep_all_columns=keep_all_columns
+    )
 
 if __name__ == '__main__':
     # Localized test case to verify the function works
