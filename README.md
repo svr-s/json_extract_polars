@@ -73,7 +73,7 @@ The primary extraction engine.
   * **Suffix Wildcard**: `["*.statusCode"]` (Gets every `statusCode` across the entire document)
 
 * **`explode_paths`** `(list)`: *(Optional)*
-  A list of specific array paths to explode. By default (`None`), all nested lists are exploded into multiple rows via Cartesian product. Passing an explicit list safely prevents Out-Of-Memory (OOM) combinatorial explosions on large payloads.
+  A list of specific array paths to explode. By default (`None`), NO nested lists are exploded; instead, they are serialized to strings to safely prevent Out-Of-Memory (OOM) combinatorial explosions on large payloads. Passing an explicit list explodes only those specific arrays into multiple rows via Cartesian product.
   If a list path is NOT included in `explode_paths`, the flattener will halt and serialize the entire unexploded list into a string.
   * **Exact Match**: `["line_items", "tags.code.category"]`
   * **Prefix Wildcard**: `["shippingAddress.*"]`

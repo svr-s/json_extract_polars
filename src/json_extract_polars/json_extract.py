@@ -38,9 +38,8 @@ def _flatten_and_expand(data, parent_key='', explode_paths=None):
             return
             
         # Determine if we have permission to explode this list
-        should_explode = True
+        should_explode = False
         if explode_paths is not None:
-            should_explode = False
             for path in explode_paths:
                 # 1. Exact match or wildcard match
                 if fnmatch.fnmatch(parent_key, path):
@@ -105,9 +104,9 @@ def extract_json(
             If a requested column or wildcard matches no columns, a warning is printed.
             
         explode_paths (list, optional):
-            A list of specific array paths to explode. By default (None), all nested lists 
-            are exploded into multiple rows via Cartesian product. Passing an explicit list 
-            safely prevents Out-Of-Memory (OOM) combinatorial explosions on large payloads.
+            A list of specific array paths to explode. By default (None), NO nested lists 
+            are exploded into multiple rows; instead, they are serialized to strings to 
+            safely prevent Out-Of-Memory (OOM) combinatorial explosions on large payloads.
             If a list path is NOT included in `explode_paths`, the flattener will halt and 
             serialize the entire unexploded list into a string.
             - Example (Exact): `["line_items", "tags"]`

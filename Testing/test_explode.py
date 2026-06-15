@@ -1,32 +1,39 @@
 from json_extract_polars import extract_json
-import json
 
-data = [{
-    "orderid": "ORD-123",
-    "line_items": [
-        {"sku": "L1"}, {"sku": "L2"}
-    ],
-    "tags": [
-        {
-            "code": {
-                "category": ["A", "B"]
+def test_ancestor_explosion():
+    data = [{
+        "orderid": "ORD-123",
+        "line_items": [
+            {"sku": "L1"}, {"sku": "L2"}
+        ],
+        "tags": [
+            {
+                "code": {
+                    "category": ["A", "B"]
+                },
+                "value": ["v1", "v2"]
             },
-            "value": ["v1", "v2"]
-        },
-        {
-            "code": {
-                "category": ["C", "D"]
-            },
-            "value": ["v3", "v4"]
-        }
-    ]
-}]
+            {
+                "code": {
+                    "category": ["C", "D"]
+                },
+                "value": ["v3", "v4"]
+            }
+        ]
+    }]
 
-print("=== Polars Ancestor Explosion ('tags.code.category') ===")
-meta, df = extract_json(
-    data, 
-    explode_paths=["tags.code.category"],
-    remove_duplicates=True,
-    simplify_columns=True
-)
-print(df)
+    meta, df = extract_json(data, explode_paths=["tags.code.category"])
+    
+    assert df.height == 4, f"Expected 4 rows, got {df.height}"
+    assert df['orderid'][0] == "ORD-123"
+
+def test_no_explosion_default():
+    data = [{
+        "orderid": "ORD-123",
+        "line_items": [
+            {"sku": "L1"}, {"sku": "L2"}
+        ]
+    }]
+
+    meta, df = extract_json(data)
+    assert df.height == 1, f"Expected 1 row, got {df.height}"
